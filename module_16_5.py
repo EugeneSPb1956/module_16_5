@@ -1,9 +1,7 @@
 
-from fastapi import FastAPI, status, Body, HTTPException, Request, Form
+from fastapi import FastAPI, Body, HTTPException, Request
 from pydantic import BaseModel
 from fastapi.responses import HTMLResponse
-from typing import List
-# from typing import Annotated
 from fastapi.templating import Jinja2Templates
 
 
@@ -13,29 +11,14 @@ app = FastAPI()
 
 templates = Jinja2Templates(directory='templates')
 
+
 class User(BaseModel):
     username: str
     age: int = None
 
-# class User_test():
-#     id: int
-#     username: str
-#     age: int = None
 
-# user1 = User_test()
-# user2 = User_test()
-# user3 = User_test()
-# user1.id = 0
-# user1.username = 'UrbanUser'
-# user1.age = 24
-# user2.id = 1
-# user2.username = 'UrbanTest'
-# user2.age = 22
-# user3.id = 2
-# user3.username = 'Capybara'
-# user3.age = 60
-# user_db = [user1, user2, user3]
 user_db = []
+
 
 @app.get('/')
 def get_all_messages(request: Request) -> HTMLResponse:
@@ -58,6 +41,7 @@ def get_user(request: Request, user_id: int) -> HTMLResponse:
 # а также передавать в него request и одного из пользователей - user.
 # Ключи в словаре для передачи определите самостоятельно в соответствии с шаблоном.
 
+
 @app.post('/users/{username}/{age}')
 def create_user(user: User, username, age) -> str:
     # Создать нового пользователя
@@ -76,6 +60,7 @@ def update_user(user_id: int, age: int = Body()) -> str:
     except IndexError:
         raise HTTPException(status_code=404, detail='User not found')
 
+
 @app.delete('/users/{user_id}')
 def delete_user(user_id: int) -> str:
     try:
@@ -83,11 +68,3 @@ def delete_user(user_id: int) -> str:
         return f'User {user_deleted.username} deleted'
     except IndexError:
         raise HTTPException(status_code=404, detail='User not found')
-
-# @app.delete('/')
-# async def kill_message_all() -> str:
-#     messages_db.clear()
-#     return 'All messages deleted'
-
-
-# current_index = str(int(max(message_db, key=int)) + 1)
